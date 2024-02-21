@@ -22,5 +22,5 @@ jobs:
           cache: true
       - name: Generate Go Source
         shell: bash
-        run: 
+        run: |
           make pipeline-build
