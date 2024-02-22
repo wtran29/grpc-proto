@@ -7,7 +7,7 @@
 package bank
 
 import (
-	basic "github.com/wtran29/protobuf-go/protogen/basic"
+	basic "github.com/wtran29/grpc-proto/protogen/basic"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
