@@ -247,6 +247,7 @@ func (x *helloServiceSayHelloToEveryoneServer) Recv() (*HelloRequest, error) {
 	return m, nil
 }
 
+
 func _HelloService_SayHelloContinuous_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(HelloServiceServer).SayHelloContinuous(&helloServiceSayHelloContinuousServer{stream})
 }
