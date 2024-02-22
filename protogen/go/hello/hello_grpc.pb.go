@@ -111,6 +111,7 @@ func (x *helloServiceSayHelloToEveryoneClient) CloseAndRecv() (*HelloResponse, e
 	return m, nil
 }
 
+
 func (c *helloServiceClient) SayHelloContinuous(ctx context.Context, opts ...grpc.CallOption) (HelloService_SayHelloContinuousClient, error) {
 	stream, err := c.cc.NewStream(ctx, &HelloService_ServiceDesc.Streams[2], "/hello.HelloService/SayHelloContinuous", opts...)
 	if err != nil {
@@ -303,6 +304,7 @@ var HelloService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 			ClientStreams: true,
 		},
+
 	},
 	Metadata: "proto/hello/hello.proto",
 }
