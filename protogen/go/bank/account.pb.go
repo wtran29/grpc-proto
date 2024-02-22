@@ -7,7 +7,7 @@
 package bank
 
 import (
-	basic "github.com/wtran29/grpc-proto/protogen/basic"
+	date "google.golang.org/genproto/googleapis/type/date"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -73,8 +73,8 @@ type CurrentBalanceResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Amount      float64     `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`
-	CurrentDate *basic.Date `protobuf:"bytes,2,opt,name=current_date,proto3" json:"current_date,omitempty"`
+	Amount      float64    `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	CurrentDate *date.Date `protobuf:"bytes,2,opt,name=current_date,proto3" json:"current_date,omitempty"`
 }
 
 func (x *CurrentBalanceResponse) Reset() {
@@ -116,7 +116,7 @@ func (x *CurrentBalanceResponse) GetAmount() float64 {
 	return 0
 }
 
-func (x *CurrentBalanceResponse) GetCurrentDate() *basic.Date {
+func (x *CurrentBalanceResponse) GetCurrentDate() *date.Date {
 	if x != nil {
 		return x.CurrentDate
 	}
@@ -163,7 +163,7 @@ var file_proto_bank_type_account_proto_msgTypes = make([]protoimpl.MessageInfo, 
 var file_proto_bank_type_account_proto_goTypes = []interface{}{
 	(*CurrentBalanceRequest)(nil),  // 0: bank.CurrentBalanceRequest
 	(*CurrentBalanceResponse)(nil), // 1: bank.CurrentBalanceResponse
-	(*basic.Date)(nil),             // 2: google.type.Date
+	(*date.Date)(nil),              // 2: google.type.Date
 }
 var file_proto_bank_type_account_proto_depIdxs = []int32{
 	2, // 0: bank.CurrentBalanceResponse.current_date:type_name -> google.type.Date
