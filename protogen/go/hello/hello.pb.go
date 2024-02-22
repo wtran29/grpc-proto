@@ -156,6 +156,7 @@ var file_proto_hello_hello_proto_rawDesc = []byte{
 	0x2f, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
+
 var (
 	file_proto_hello_hello_proto_rawDescOnce sync.Once
 	file_proto_hello_hello_proto_rawDescData = file_proto_hello_hello_proto_rawDesc
