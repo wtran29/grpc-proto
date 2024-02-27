@@ -23,7 +23,7 @@ const (
 	BankService_FetchExchangeRates_FullMethodName    = "/bank.BankService/FetchExchangeRates"
 	BankService_SummarizeTransactions_FullMethodName = "/bank.BankService/SummarizeTransactions"
 	BankService_TransferMultiple_FullMethodName      = "/bank.BankService/TransferMultiple"
-	BankService_UnimplementTest_FullMethodName       = "/bank.BankService/UnimplementTest"
+	BankService_CreateAccount_FullMethodName         = "/bank.BankService/CreateAccount"
 )
 
 // BankServiceClient is the client API for BankService service.
@@ -34,7 +34,7 @@ type BankServiceClient interface {
 	FetchExchangeRates(ctx context.Context, in *ExchangeRateRequest, opts ...grpc.CallOption) (BankService_FetchExchangeRatesClient, error)
 	SummarizeTransactions(ctx context.Context, opts ...grpc.CallOption) (BankService_SummarizeTransactionsClient, error)
 	TransferMultiple(ctx context.Context, opts ...grpc.CallOption) (BankService_TransferMultipleClient, error)
-	UnimplementTest(ctx context.Context, in *SomeRequest, opts ...grpc.CallOption) (*SomeResponse, error)
+	CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error)
 }
 
 type bankServiceClient struct {
@@ -151,9 +151,9 @@ func (x *bankServiceTransferMultipleClient) Recv() (*TransferResponse, error) {
 	return m, nil
 }
 
-func (c *bankServiceClient) UnimplementTest(ctx context.Context, in *SomeRequest, opts ...grpc.CallOption) (*SomeResponse, error) {
-	out := new(SomeResponse)
-	err := c.cc.Invoke(ctx, BankService_UnimplementTest_FullMethodName, in, out, opts...)
+func (c *bankServiceClient) CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error) {
+	out := new(CreateAccountResponse)
+	err := c.cc.Invoke(ctx, BankService_CreateAccount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +168,7 @@ type BankServiceServer interface {
 	FetchExchangeRates(*ExchangeRateRequest, BankService_FetchExchangeRatesServer) error
 	SummarizeTransactions(BankService_SummarizeTransactionsServer) error
 	TransferMultiple(BankService_TransferMultipleServer) error
-	UnimplementTest(context.Context, *SomeRequest) (*SomeResponse, error)
+	CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error)
 	mustEmbedUnimplementedBankServiceServer()
 }
 
@@ -188,8 +188,8 @@ func (UnimplementedBankServiceServer) SummarizeTransactions(BankService_Summariz
 func (UnimplementedBankServiceServer) TransferMultiple(BankService_TransferMultipleServer) error {
 	return status.Errorf(codes.Unimplemented, "method TransferMultiple not implemented")
 }
-func (UnimplementedBankServiceServer) UnimplementTest(context.Context, *SomeRequest) (*SomeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnimplementTest not implemented")
+func (UnimplementedBankServiceServer) CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
 }
 func (UnimplementedBankServiceServer) mustEmbedUnimplementedBankServiceServer() {}
 
@@ -295,20 +295,20 @@ func (x *bankServiceTransferMultipleServer) Recv() (*TransferRequest, error) {
 	return m, nil
 }
 
-func _BankService_UnimplementTest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SomeRequest)
+func _BankService_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BankServiceServer).UnimplementTest(ctx, in)
+		return srv.(BankServiceServer).CreateAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: BankService_UnimplementTest_FullMethodName,
+		FullMethod: BankService_CreateAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BankServiceServer).UnimplementTest(ctx, req.(*SomeRequest))
+		return srv.(BankServiceServer).CreateAccount(ctx, req.(*CreateAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -325,8 +325,8 @@ var BankService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BankService_GetCurrentBalance_Handler,
 		},
 		{
-			MethodName: "UnimplementTest",
-			Handler:    _BankService_UnimplementTest_Handler,
+			MethodName: "CreateAccount",
+			Handler:    _BankService_CreateAccount_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
