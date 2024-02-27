@@ -8,8 +8,6 @@ import "proto/bank/type/transaction.proto";
 import "proto/bank/type/transfer.proto";
 
 
-
-
 option go_package = "github.com/wtran29/grpc-proto/protogen/go/bank";
 
 service BankService {
