@@ -9,6 +9,7 @@ import "proto/bank/type/transfer.proto";
 import "proto/bank/type/test.proto";
 
 
+
 option go_package = "github.com/wtran29/grpc-proto/protogen/go/bank";
 
 service BankService {
