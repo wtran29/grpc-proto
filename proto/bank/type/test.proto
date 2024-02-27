@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package bank;
+
+option go_package = "github.com/wtran29/grpc-proto/protogen/go/bank";
+
+message SomeRequest {
+  string name = 1;
+}
+
+message SomeResponse {
+  string name = 1;
+}
