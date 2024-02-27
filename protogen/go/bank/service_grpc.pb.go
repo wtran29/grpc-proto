@@ -23,6 +23,7 @@ const (
 	BankService_FetchExchangeRates_FullMethodName    = "/bank.BankService/FetchExchangeRates"
 	BankService_SummarizeTransactions_FullMethodName = "/bank.BankService/SummarizeTransactions"
 	BankService_TransferMultiple_FullMethodName      = "/bank.BankService/TransferMultiple"
+	BankService_UnimplementTest_FullMethodName       = "/bank.BankService/UnimplementTest"
 )
 
 // BankServiceClient is the client API for BankService service.
@@ -33,6 +34,7 @@ type BankServiceClient interface {
 	FetchExchangeRates(ctx context.Context, in *ExchangeRateRequest, opts ...grpc.CallOption) (BankService_FetchExchangeRatesClient, error)
 	SummarizeTransactions(ctx context.Context, opts ...grpc.CallOption) (BankService_SummarizeTransactionsClient, error)
 	TransferMultiple(ctx context.Context, opts ...grpc.CallOption) (BankService_TransferMultipleClient, error)
+	UnimplementTest(ctx context.Context, in *SomeRequest, opts ...grpc.CallOption) (*SomeResponse, error)
 }
 
 type bankServiceClient struct {
@@ -149,6 +151,15 @@ func (x *bankServiceTransferMultipleClient) Recv() (*TransferResponse, error) {
 	return m, nil
 }
 
+func (c *bankServiceClient) UnimplementTest(ctx context.Context, in *SomeRequest, opts ...grpc.CallOption) (*SomeResponse, error) {
+	out := new(SomeResponse)
+	err := c.cc.Invoke(ctx, BankService_UnimplementTest_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BankServiceServer is the server API for BankService service.
 // All implementations must embed UnimplementedBankServiceServer
 // for forward compatibility
@@ -157,6 +168,7 @@ type BankServiceServer interface {
 	FetchExchangeRates(*ExchangeRateRequest, BankService_FetchExchangeRatesServer) error
 	SummarizeTransactions(BankService_SummarizeTransactionsServer) error
 	TransferMultiple(BankService_TransferMultipleServer) error
+	UnimplementTest(context.Context, *SomeRequest) (*SomeResponse, error)
 	mustEmbedUnimplementedBankServiceServer()
 }
 
@@ -175,6 +187,9 @@ func (UnimplementedBankServiceServer) SummarizeTransactions(BankService_Summariz
 }
 func (UnimplementedBankServiceServer) TransferMultiple(BankService_TransferMultipleServer) error {
 	return status.Errorf(codes.Unimplemented, "method TransferMultiple not implemented")
+}
+func (UnimplementedBankServiceServer) UnimplementTest(context.Context, *SomeRequest) (*SomeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnimplementTest not implemented")
 }
 func (UnimplementedBankServiceServer) mustEmbedUnimplementedBankServiceServer() {}
 
@@ -280,6 +295,24 @@ func (x *bankServiceTransferMultipleServer) Recv() (*TransferRequest, error) {
 	return m, nil
 }
 
+func _BankService_UnimplementTest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SomeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BankServiceServer).UnimplementTest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BankService_UnimplementTest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BankServiceServer).UnimplementTest(ctx, req.(*SomeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BankService_ServiceDesc is the grpc.ServiceDesc for BankService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -290,6 +323,10 @@ var BankService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCurrentBalance",
 			Handler:    _BankService_GetCurrentBalance_Handler,
+		},
+		{
+			MethodName: "UnimplementTest",
+			Handler:    _BankService_UnimplementTest_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
