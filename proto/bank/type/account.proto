@@ -18,7 +18,7 @@ message CurrentBalanceResponse {
 message CreateAccountRequest {
   string account_name = 1 [json_name = "account_name"];
   string currency = 2;
-  double initial_deposit_amount = 4 [json_name = "initial_deposit_amount"];
+  double initial_deposit_amount = 3 [json_name = "initial_deposit_amount"];
 }
 
 message CreateAccountResponse {
