@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package resiliency;
 
+import "proto/protoc-gen-openapiv2/options/annotations.proto";
+
 option go_package = "github.com/wtran29/grpc-proto/protogen/go/resiliency";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
@@ -96,7 +98,7 @@ service ResiliencyWithMetadataService {
       responses: {
         key: "400";
         value: {
-          description: "Returned when the resource is temporarily unavailable.";
+          description: "Sample response, 400 when ...";
         }
       }
     };
@@ -118,7 +120,7 @@ service ResiliencyWithMetadataService {
       responses: {
         key: "400";
         value: {
-          description: "Returned when the resource is temporarily unavailable.";
+          description: "Sample response, 400 when ...";
         }
       }
     };
@@ -140,7 +142,7 @@ service ResiliencyWithMetadataService {
       responses: {
         key: "400";
         value: {
-          description: "Returned when the resource is temporarily unavailable.";
+          description: "Sample response, 400 when ...";
         }
       }
     };
