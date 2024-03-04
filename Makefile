@@ -9,7 +9,7 @@ clean:
 
 .PHONY: protoc-go
 protoc-go:
-	protoc -I ${GP_PATH} -I . --go_opt=module=${GO_MODULE} --go_out=. \
+	protoc --go_opt=module=${GO_MODULE} --go_out=. \
 	--go-grpc_opt=module=${GO_MODULE} --go-grpc_out=. \
 	./proto/hello/*.proto ./proto/payment/*.proto ./proto/transaction/*.proto \
 	./proto/bank/*.proto ./proto/bank/type/*.proto \
