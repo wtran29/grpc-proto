@@ -32,11 +32,18 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
+var (
+	filter_ResiliencyService_UnaryResiliency_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
 func request_ResiliencyService_UnaryResiliency_0(ctx context.Context, marshaler runtime.Marshaler, client extResiliency.ResiliencyServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq extResiliency.ResiliencyRequest
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ResiliencyService_UnaryResiliency_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -49,7 +56,10 @@ func local_request_ResiliencyService_UnaryResiliency_0(ctx context.Context, mars
 	var protoReq extResiliency.ResiliencyRequest
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ResiliencyService_UnaryResiliency_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -58,11 +68,45 @@ func local_request_ResiliencyService_UnaryResiliency_0(ctx context.Context, mars
 
 }
 
+var (
+	filter_ResiliencyService_ServerStreamingResiliency_0 = &utilities.DoubleArray{Encoding: map[string]int{"min_delay_second": 0, "max_delay_second": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
+)
+
 func request_ResiliencyService_ServerStreamingResiliency_0(ctx context.Context, marshaler runtime.Marshaler, client extResiliency.ResiliencyServiceClient, req *http.Request, pathParams map[string]string) (extResiliency.ResiliencyService_ServerStreamingResiliencyClient, runtime.ServerMetadata, error) {
 	var protoReq extResiliency.ResiliencyRequest
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["min_delay_second"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "min_delay_second")
+	}
+
+	protoReq.MinDelaySecond, err = runtime.Int32(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "min_delay_second", err)
+	}
+
+	val, ok = pathParams["max_delay_second"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "max_delay_second")
+	}
+
+	protoReq.MaxDelaySecond, err = runtime.Int32(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "max_delay_second", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ResiliencyService_ServerStreamingResiliency_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -306,7 +350,7 @@ func request_ResiliencyWithMetadataService_BiDirectionalResiliencyWithMetadata_0
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterResiliencyServiceHandlerFromEndpoint instead.
 func RegisterResiliencyServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extResiliency.ResiliencyServiceServer) error {
 
-	mux.Handle("POST", pattern_ResiliencyService_UnaryResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_UnaryResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -314,7 +358,7 @@ func RegisterResiliencyServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/resiliency.ResiliencyService/UnaryResiliency", runtime.WithHTTPPathPattern("/resiliency.ResiliencyService/UnaryResiliency"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/resiliency.ResiliencyService/UnaryResiliency", runtime.WithHTTPPathPattern("/api/resiliency/v1/unary"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -331,21 +375,21 @@ func RegisterResiliencyServiceHandlerServer(ctx context.Context, mux *runtime.Se
 
 	})
 
-	mux.Handle("POST", pattern_ResiliencyService_ServerStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_ServerStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
 		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 		return
 	})
 
-	mux.Handle("POST", pattern_ResiliencyService_ClientStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_ClientStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
 		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 		return
 	})
 
-	mux.Handle("POST", pattern_ResiliencyService_BiDirectionalResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_BiDirectionalResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
 		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -369,7 +413,7 @@ func RegisterResiliencyWithMetadataServiceHandlerServer(ctx context.Context, mux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/UnaryResiliencyWithMetadata", runtime.WithHTTPPathPattern("/resiliency.ResiliencyWithMetadataService/UnaryResiliencyWithMetadata"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/UnaryResiliencyWithMetadata", runtime.WithHTTPPathPattern("/api/resiliency/v1/unary"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -448,13 +492,13 @@ func RegisterResiliencyServiceHandler(ctx context.Context, mux *runtime.ServeMux
 // "extResiliency.ResiliencyServiceClient" to call the correct interceptors.
 func RegisterResiliencyServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extResiliency.ResiliencyServiceClient) error {
 
-	mux.Handle("POST", pattern_ResiliencyService_UnaryResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_UnaryResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/UnaryResiliency", runtime.WithHTTPPathPattern("/resiliency.ResiliencyService/UnaryResiliency"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/UnaryResiliency", runtime.WithHTTPPathPattern("/api/resiliency/v1/unary"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -470,13 +514,13 @@ func RegisterResiliencyServiceHandlerClient(ctx context.Context, mux *runtime.Se
 
 	})
 
-	mux.Handle("POST", pattern_ResiliencyService_ServerStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_ServerStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/ServerStreamingResiliency", runtime.WithHTTPPathPattern("/resiliency.ResiliencyService/ServerStreamingResiliency"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/ServerStreamingResiliency", runtime.WithHTTPPathPattern("/api/resiliency/v1/server_streaming/{min_delay_second}/{max_delay_second}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -492,13 +536,13 @@ func RegisterResiliencyServiceHandlerClient(ctx context.Context, mux *runtime.Se
 
 	})
 
-	mux.Handle("POST", pattern_ResiliencyService_ClientStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_ClientStreamingResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/ClientStreamingResiliency", runtime.WithHTTPPathPattern("/resiliency.ResiliencyService/ClientStreamingResiliency"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/ClientStreamingResiliency", runtime.WithHTTPPathPattern("/api/resiliency/v1/client_streaming"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -514,13 +558,13 @@ func RegisterResiliencyServiceHandlerClient(ctx context.Context, mux *runtime.Se
 
 	})
 
-	mux.Handle("POST", pattern_ResiliencyService_BiDirectionalResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ResiliencyService_BiDirectionalResiliency_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/BiDirectionalResiliency", runtime.WithHTTPPathPattern("/resiliency.ResiliencyService/BiDirectionalResiliency"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyService/BiDirectionalResiliency", runtime.WithHTTPPathPattern("/api/resiliency/v1/bidirectional_streaming"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -540,13 +584,13 @@ func RegisterResiliencyServiceHandlerClient(ctx context.Context, mux *runtime.Se
 }
 
 var (
-	pattern_ResiliencyService_UnaryResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyService", "UnaryResiliency"}, ""))
+	pattern_ResiliencyService_UnaryResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "resiliency", "v1", "unary"}, ""))
 
-	pattern_ResiliencyService_ServerStreamingResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyService", "ServerStreamingResiliency"}, ""))
+	pattern_ResiliencyService_ServerStreamingResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"api", "resiliency", "v1", "server_streaming", "min_delay_second", "max_delay_second"}, ""))
 
-	pattern_ResiliencyService_ClientStreamingResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyService", "ClientStreamingResiliency"}, ""))
+	pattern_ResiliencyService_ClientStreamingResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "resiliency", "v1", "client_streaming"}, ""))
 
-	pattern_ResiliencyService_BiDirectionalResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyService", "BiDirectionalResiliency"}, ""))
+	pattern_ResiliencyService_BiDirectionalResiliency_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "resiliency", "v1", "bidirectional_streaming"}, ""))
 )
 
 var (
@@ -603,7 +647,7 @@ func RegisterResiliencyWithMetadataServiceHandlerClient(ctx context.Context, mux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/UnaryResiliencyWithMetadata", runtime.WithHTTPPathPattern("/resiliency.ResiliencyWithMetadataService/UnaryResiliencyWithMetadata"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/UnaryResiliencyWithMetadata", runtime.WithHTTPPathPattern("/api/resiliency/v1/unary"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -625,7 +669,7 @@ func RegisterResiliencyWithMetadataServiceHandlerClient(ctx context.Context, mux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/ServerStreamingResiliencyWithMetadata", runtime.WithHTTPPathPattern("/resiliency.ResiliencyWithMetadataService/ServerStreamingResiliencyWithMetadata"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/ServerStreamingResiliencyWithMetadata", runtime.WithHTTPPathPattern("/api/resiliency/v1/server_streaming"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -647,7 +691,7 @@ func RegisterResiliencyWithMetadataServiceHandlerClient(ctx context.Context, mux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/ClientStreamingResiliencyWithMetadata", runtime.WithHTTPPathPattern("/resiliency.ResiliencyWithMetadataService/ClientStreamingResiliencyWithMetadata"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/ClientStreamingResiliencyWithMetadata", runtime.WithHTTPPathPattern("/api/resiliency/v1/client_streaming"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -669,7 +713,7 @@ func RegisterResiliencyWithMetadataServiceHandlerClient(ctx context.Context, mux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/BiDirectionalResiliencyWithMetadata", runtime.WithHTTPPathPattern("/resiliency.ResiliencyWithMetadataService/BiDirectionalResiliencyWithMetadata"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/resiliency.ResiliencyWithMetadataService/BiDirectionalResiliencyWithMetadata", runtime.WithHTTPPathPattern("/api/resiliency/v1/bidirectional_streaming"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -689,13 +733,13 @@ func RegisterResiliencyWithMetadataServiceHandlerClient(ctx context.Context, mux
 }
 
 var (
-	pattern_ResiliencyWithMetadataService_UnaryResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyWithMetadataService", "UnaryResiliencyWithMetadata"}, ""))
+	pattern_ResiliencyWithMetadataService_UnaryResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "resiliency", "v1", "unary"}, ""))
 
-	pattern_ResiliencyWithMetadataService_ServerStreamingResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyWithMetadataService", "ServerStreamingResiliencyWithMetadata"}, ""))
+	pattern_ResiliencyWithMetadataService_ServerStreamingResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "resiliency", "v1", "server_streaming"}, ""))
 
-	pattern_ResiliencyWithMetadataService_ClientStreamingResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyWithMetadataService", "ClientStreamingResiliencyWithMetadata"}, ""))
+	pattern_ResiliencyWithMetadataService_ClientStreamingResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "resiliency", "v1", "client_streaming"}, ""))
 
-	pattern_ResiliencyWithMetadataService_BiDirectionalResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"resiliency.ResiliencyWithMetadataService", "BiDirectionalResiliencyWithMetadata"}, ""))
+	pattern_ResiliencyWithMetadataService_BiDirectionalResiliencyWithMetadata_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "resiliency", "v1", "bidirectional_streaming"}, ""))
 )
 
 var (
