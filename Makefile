@@ -1,5 +1,5 @@
 GO_MODULE := github.com/wtran29/grpc-proto
-GP_PATH = C:/vcpkg/installed/x64-windows/include
+GP_PATH = C://vcpkg/installed/x64-windows/include
 
 .PHONY: clean
 clean:
