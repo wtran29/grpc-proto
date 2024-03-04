@@ -23,5 +23,4 @@ message CreateAccountRequest {
 
 message CreateAccountResponse {
   string account_id = 1 [json_name = "account_id"];
-  
 }
