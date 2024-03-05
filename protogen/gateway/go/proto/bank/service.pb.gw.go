@@ -32,11 +32,18 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
+var (
+	filter_BankService_GetCurrentBalance_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
 func request_BankService_GetCurrentBalance_0(ctx context.Context, marshaler runtime.Marshaler, client extBank.BankServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq extBank.CurrentBalanceRequest
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_BankService_GetCurrentBalance_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -49,7 +56,10 @@ func local_request_BankService_GetCurrentBalance_0(ctx context.Context, marshale
 	var protoReq extBank.CurrentBalanceRequest
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_BankService_GetCurrentBalance_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -58,11 +68,18 @@ func local_request_BankService_GetCurrentBalance_0(ctx context.Context, marshale
 
 }
 
+var (
+	filter_BankService_FetchExchangeRates_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
 func request_BankService_FetchExchangeRates_0(ctx context.Context, marshaler runtime.Marshaler, client extBank.BankServiceClient, req *http.Request, pathParams map[string]string) (extBank.BankService_FetchExchangeRatesClient, runtime.ServerMetadata, error) {
 	var protoReq extBank.ExchangeRateRequest
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_BankService_FetchExchangeRates_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -198,7 +215,7 @@ func local_request_BankService_CreateAccount_0(ctx context.Context, marshaler ru
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterBankServiceHandlerFromEndpoint instead.
 func RegisterBankServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server extBank.BankServiceServer) error {
 
-	mux.Handle("POST", pattern_BankService_GetCurrentBalance_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_BankService_GetCurrentBalance_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -206,7 +223,7 @@ func RegisterBankServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/bank.BankService/GetCurrentBalance", runtime.WithHTTPPathPattern("/bank.BankService/GetCurrentBalance"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/bank.BankService/GetCurrentBalance", runtime.WithHTTPPathPattern("/bank/v1/account/current_balance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -223,7 +240,7 @@ func RegisterBankServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("POST", pattern_BankService_FetchExchangeRates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_BankService_FetchExchangeRates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
 		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -252,7 +269,7 @@ func RegisterBankServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/bank.BankService/CreateAccount", runtime.WithHTTPPathPattern("/bank.BankService/CreateAccount"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/bank.BankService/CreateAccount", runtime.WithHTTPPathPattern("/bank/v1/account"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -310,13 +327,13 @@ func RegisterBankServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn
 // "extBank.BankServiceClient" to call the correct interceptors.
 func RegisterBankServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client extBank.BankServiceClient) error {
 
-	mux.Handle("POST", pattern_BankService_GetCurrentBalance_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_BankService_GetCurrentBalance_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/GetCurrentBalance", runtime.WithHTTPPathPattern("/bank.BankService/GetCurrentBalance"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/GetCurrentBalance", runtime.WithHTTPPathPattern("/bank/v1/account/current_balance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -332,13 +349,13 @@ func RegisterBankServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("POST", pattern_BankService_FetchExchangeRates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_BankService_FetchExchangeRates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/FetchExchangeRates", runtime.WithHTTPPathPattern("/bank.BankService/FetchExchangeRates"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/FetchExchangeRates", runtime.WithHTTPPathPattern("/bank/v1/exchange_rates"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -360,7 +377,7 @@ func RegisterBankServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/SummarizeTransactions", runtime.WithHTTPPathPattern("/bank.BankService/SummarizeTransactions"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/SummarizeTransactions", runtime.WithHTTPPathPattern("/bank/v1/transaction/summarize"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -382,7 +399,7 @@ func RegisterBankServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/TransferMultiple", runtime.WithHTTPPathPattern("/bank.BankService/TransferMultiple"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/TransferMultiple", runtime.WithHTTPPathPattern("/bank/v1/transaction/transfer_multiple"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -404,7 +421,7 @@ func RegisterBankServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/CreateAccount", runtime.WithHTTPPathPattern("/bank.BankService/CreateAccount"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/bank.BankService/CreateAccount", runtime.WithHTTPPathPattern("/bank/v1/account"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -424,15 +441,15 @@ func RegisterBankServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 }
 
 var (
-	pattern_BankService_GetCurrentBalance_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"bank.BankService", "GetCurrentBalance"}, ""))
+	pattern_BankService_GetCurrentBalance_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"bank", "v1", "account", "current_balance"}, ""))
 
-	pattern_BankService_FetchExchangeRates_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"bank.BankService", "FetchExchangeRates"}, ""))
+	pattern_BankService_FetchExchangeRates_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"bank", "v1", "exchange_rates"}, ""))
 
-	pattern_BankService_SummarizeTransactions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"bank.BankService", "SummarizeTransactions"}, ""))
+	pattern_BankService_SummarizeTransactions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"bank", "v1", "transaction", "summarize"}, ""))
 
-	pattern_BankService_TransferMultiple_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"bank.BankService", "TransferMultiple"}, ""))
+	pattern_BankService_TransferMultiple_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"bank", "v1", "transaction", "transfer_multiple"}, ""))
 
-	pattern_BankService_CreateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"bank.BankService", "CreateAccount"}, ""))
+	pattern_BankService_CreateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"bank", "v1", "account"}, ""))
 )
 
 var (
